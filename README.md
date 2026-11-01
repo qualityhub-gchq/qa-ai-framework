@@ -1,12 +1,12 @@
 # QA AI Framework
 
-![Regression](https://github.com/YOUR_GITHUB_USER/qa-ai-framework/actions/workflows/regression.yml/badge.svg)
+[![Regression](https://github.com/qualityhub-gchq/qa-ai-framework/actions/workflows/regression.yml/badge.svg)](https://github.com/qualityhub-gchq/qa-ai-framework/actions/workflows/regression.yml) 
 
 An **AI-assisted test automation framework** built with **Playwright + TypeScript**, using
 **Claude Code** and **Playwright Test Agents** to design test cases, generate and maintain
 automated tests, and triage failures into **GitHub Issues** — all running in **GitHub Actions**.
 
-> Portfolio project by **YOUR NAME** · [LinkedIn](https://linkedin.com/in/YOUR_PROFILE)
+> Portfolio project by **Geanina Chavarria** · [LinkedIn](https://linkedin.com/in/geanina-chavarria)
 
 ---
 
@@ -67,7 +67,7 @@ automated tests, and triage failures into **GitHub Issues** — all running in *
 ## Getting started
 
 ```bash
-git clone https://github.com/YOUR_GITHUB_USER/qa-ai-framework.git
+git clone https://github.com/qualityhub-gchq/qa-ai-framework.git
 cd qa-ai-framework
 npm ci
 npx playwright install chromium
