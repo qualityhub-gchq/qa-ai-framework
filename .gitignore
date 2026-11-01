@@ -6,3 +6,7 @@ node_modules/
 /playwright/.auth/
 .env
 .DS_Store
+
+# AI Explorer run files
+explorer-input.json
+pr-body.md

@@ -2,7 +2,7 @@
 # Runs after a Regression run FAILS, reads the results and opens GitHub Issues.
 #
 # OFF by default. To enable:
-#   1. Add secret  ANTHROPIC_API_KEY        (Settings → Secrets and variables → Actions → Secrets)
+#   1. Add secret  CLAUDE_CODE_OAUTH_TOKEN  (same one the AI Explorer uses; `claude setup-token`)
 #   2. Add variable ENABLE_AI_BUG_REPORTER = true   (same page → Variables)
 #
 # ⚠️ Verify the claude-code-action inputs (especially claude_args / allowed tools) against
@@ -19,6 +19,7 @@ permissions:
   contents: read
   issues: write
   actions: read # needed to download artifacts from the Regression run
+  id-token: write # used by claude-code-action authentication
 
 jobs:
   report:
@@ -53,9 +54,9 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          claude_args: '--max-turns 15 --allowedTools "Read,Glob,Grep,Bash(gh issue list:*),Bash(gh issue create:*),Bash(gh issue comment:*)"'
+          claude_args: '--model sonnet --max-turns 15 --allowedTools "Read,Glob,Grep,Bash(gh issue list:*),Bash(gh issue create:*),Bash(gh issue comment:*)"'
           prompt: |
             You are a senior QA engineer triaging a failed regression run.
             Run URL: ${{ github.event.workflow_run.html_url }}

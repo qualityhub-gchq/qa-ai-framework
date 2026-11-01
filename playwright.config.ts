@@ -50,5 +50,12 @@ export default defineConfig({
         extraHTTPHeaders: { Accept: 'application/json' },
       },
     },
+    {
+      // Tests written by the AI Explorer. Each file sets its own baseURL with test.use().
+      // Tagged @generated, so they never run in the @smoke/@regression CI suites until a human promotes them.
+      name: 'explorer',
+      testDir: './tests/generated',
+      use: { ...devices['Desktop Chrome'] },
+    },
   ],
 });

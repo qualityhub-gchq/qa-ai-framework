@@ -1,0 +1,124 @@
+# AI Explorer — give it a URL, get back a Pull Request with a test plan + automated tests + results.
+#
+# How to run:  GitHub → Actions → "AI Explorer" → Run workflow → enter URL (+ optional requirements)
+#
+# One-time setup (see README → "AI Explorer"):
+#   1. Secret  CLAUDE_CODE_OAUTH_TOKEN   (run `claude setup-token` locally, uses your Claude Pro plan)
+#   2. Settings → Actions → General → Workflow permissions:
+#        "Read and write permissions" + "Allow GitHub Actions to create and approve pull requests"
+#   3. Allowed sites live in config/explorer.json
+#
+# Guardrails: allowlisted https domains only · manual trigger only (repo writers) · tests tagged
+# @generated (never part of the regression) · output is a DRAFT PR that a human must review.
+
+name: AI Explorer
+
+on:
+  workflow_dispatch:
+    inputs:
+      url:
+        description: 'Page to explore (must be in config/explorer.json allowedDomains)'
+        required: true
+        default: 'https://www.saucedemo.com'
+      requirements:
+        description: 'Optional: user story / acceptance criteria (improves expected results)'
+        required: false
+        default: ''
+
+concurrency:
+  group: ai-explorer
+  cancel-in-progress: false
+
+permissions:
+  contents: write # push the PR branch
+  pull-requests: write # open the PR
+  id-token: write # used by claude-code-action authentication
+
+jobs:
+  explore:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      # User inputs go through env vars, never pasted into shell commands (prevents script injection).
+      EXPLORER_URL: ${{ inputs.url }}
+      EXPLORER_REQUIREMENTS: ${{ inputs.requirements }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - name: Install Playwright browser
+        run: npx playwright install --with-deps chromium
+
+      - name: Validate URL against allowlist
+        id: prep
+        run: node scripts/explorer-prepare.mjs
+
+      - name: Claude explores, plans and automates
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          prompt: |
+            Follow the instructions in .github/prompts/ai-explorer.md exactly.
+            Your inputs are in explorer-input.json.
+          claude_args: >-
+            --model sonnet
+            --max-turns 60
+            --mcp-config ${{ github.workspace }}/.mcp.json
+            --allowedTools "Read,Write,Edit,Glob,Grep,mcp__playwright-test,Bash(npx playwright test:*),Bash(npx eslint:*),Bash(npx prettier:*),Bash(node scripts/page-snapshot.mjs:*)"
+
+      # From here on, the WORKFLOW (not the AI) verifies the result — the AI doesn't grade itself.
+      - name: Run generated tests
+        id: tests
+        continue-on-error: true
+        env:
+          SLUG: ${{ steps.prep.outputs.slug }}
+        run: npx playwright test --project=explorer "tests/generated/$SLUG" --retries=1
+
+      - name: Lint generated tests
+        id: lint
+        continue-on-error: true
+        env:
+          SLUG: ${{ steps.prep.outputs.slug }}
+        run: npx eslint "tests/generated/$SLUG"
+
+      - name: Format generated files (keeps the Regression format check green)
+        env:
+          SLUG: ${{ steps.prep.outputs.slug }}
+        run: npx prettier --write --ignore-unknown "tests/generated/$SLUG" "specs/generated/$SLUG.md" || true
+
+      - name: Build PR description
+        env:
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          LINT_OUTCOME: ${{ steps.lint.outcome }}
+          PLAN_FILE: specs/generated/${{ steps.prep.outputs.slug }}.md
+          TESTS_DIR: tests/generated/${{ steps.prep.outputs.slug }}
+        run: node scripts/explorer-summary.mjs test-results/results.json pr-body.md
+
+      - name: Upload report and traces
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: ai-explorer-report-${{ steps.prep.outputs.slug }}
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 14
+
+      - name: Open draft Pull Request for human review
+        uses: peter-evans/create-pull-request@v7
+        with:
+          branch: ${{ steps.prep.outputs.branch }}
+          title: 'AI Explorer: tests for ${{ steps.prep.outputs.host }}'
+          commit-message: 'test(ai-explorer): generated plan and tests for ${{ steps.prep.outputs.host }}'
+          body-path: pr-body.md
+          labels: ai-generated
+          draft: true
+          # Only these paths can end up in the PR, whatever the AI touched.
+          add-paths: |
+            specs/generated/**
+            tests/generated/**

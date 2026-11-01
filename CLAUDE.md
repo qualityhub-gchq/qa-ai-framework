@@ -12,3 +12,9 @@ This is a QA automation framework (Playwright + TypeScript). When writing or cha
 - Read secrets/URLs only through `config/env.ts`. Never hard-code real credentials.
 - After changes run: `npm run lint && npm run typecheck && npx playwright test`.
 - When a test fails because the APP is wrong (not the test), do not "fix" the assertion — report it as a bug.
+
+## AI Explorer (generated tests)
+
+- Generated tests live in `tests/generated/<site>/` and plans in `specs/generated/<site>.md`.
+- They import from `@playwright/test`, set `test.use({ baseURL })` per file and are tagged `@generated` only.
+- To promote a reviewed test: move it to `tests/ui/`, refactor it into Page Objects/fixtures, tag `@regression`.
