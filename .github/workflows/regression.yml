@@ -1,0 +1,78 @@
+name: Regression
+
+on:
+  pull_request: # Fast quality gate on every PR
+  push:
+    branches: [main]
+  schedule:
+    - cron: '0 8 * * *' # Nightly full regression (08:00 UTC = 02:00 Costa Rica)
+  workflow_dispatch: # Manual "Run workflow" button
+    inputs:
+      suite:
+        description: 'Which tag to run'
+        type: choice
+        options: ['@regression', '@smoke']
+        default: '@regression'
+
+# Cancel an older run of the same branch when a new commit arrives.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    name: Lint & typecheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm run format:check
+
+  test:
+    name: Playwright tests
+    needs: quality
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      # Pull requests run the fast smoke suite; schedule/push/manual run the full regression.
+      SUITE: ${{ github.event_name == 'pull_request' && '@smoke' || inputs.suite || '@regression' }}
+      UI_BASE_URL: ${{ vars.UI_BASE_URL }}
+      API_BASE_URL: ${{ vars.API_BASE_URL }}
+      SAUCE_PASSWORD: ${{ secrets.SAUCE_PASSWORD }}
+      API_USERNAME: ${{ secrets.API_USERNAME }}
+      API_PASSWORD: ${{ secrets.API_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - name: Install Playwright browser
+        run: npx playwright install --with-deps chromium
+      - name: Run ${{ env.SUITE }} tests
+        run: npx playwright test --grep "$SUITE"
+
+      - name: Upload HTML report
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 14
+      - name: Upload test results (traces, screenshots, results.json)
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: test-results/
+          retention-days: 14

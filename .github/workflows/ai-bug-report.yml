@@ -1,0 +1,78 @@
+# AI Bug Reporter — DRAFT, finalized in Phase 5.
+# Runs after a Regression run FAILS, reads the results and opens GitHub Issues.
+#
+# OFF by default. To enable:
+#   1. Add secret  ANTHROPIC_API_KEY        (Settings → Secrets and variables → Actions → Secrets)
+#   2. Add variable ENABLE_AI_BUG_REPORTER = true   (same page → Variables)
+#
+# ⚠️ Verify the claude-code-action inputs (especially claude_args / allowed tools) against
+#    https://github.com/anthropics/claude-code-action before enabling — they change between versions.
+
+name: AI Bug Reporter
+
+on:
+  workflow_run:
+    workflows: ['Regression']
+    types: [completed]
+
+permissions:
+  contents: read
+  issues: write
+  actions: read # needed to download artifacts from the Regression run
+
+jobs:
+  report:
+    # Guardrails: only on failure, only for non-PR runs (main / nightly / manual), only when enabled.
+    if: >-
+      github.event.workflow_run.conclusion == 'failure' &&
+      github.event.workflow_run.event != 'pull_request' &&
+      vars.ENABLE_AI_BUG_REPORTER == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download test results from the failed run
+        uses: actions/download-artifact@v4
+        with:
+          name: test-results
+          path: test-results
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Make sure the labels exist
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh label create bug        --color d73a4a --force
+          gh label create ai-triaged --color 5319e7 --description "Filed by AI, needs human confirmation" --force
+          gh label create automation-issue --color fbca04 --description "Test problem, not a product bug" --force
+
+      - name: Triage failures and file issues
+        uses: anthropics/claude-code-action@v1
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          claude_args: '--max-turns 15 --allowedTools "Read,Glob,Grep,Bash(gh issue list:*),Bash(gh issue create:*),Bash(gh issue comment:*)"'
+          prompt: |
+            You are a senior QA engineer triaging a failed regression run.
+            Run URL: ${{ github.event.workflow_run.html_url }}
+
+            1. Read test-results/results.json. Consider ONLY tests whose final status is "failed"
+               or "timedOut" after all retries. Ignore tests that passed on retry (flaky) and skipped tests.
+            2. For each failing test, read its error and any error-context.md in test-results/.
+            3. Classify it:
+               - PRODUCT BUG: the app behaves differently from the expected result.
+               - AUTOMATION ISSUE: broken locator, bad test data, environment/network problem.
+            4. Before creating anything, run `gh issue list --state open --search "<test title> in:title"`.
+               If a matching issue exists, add a comment with this run's URL instead of creating a duplicate.
+            5. Otherwise create ONE issue per failing test with:
+               Title: "[Regression] <test title>"
+               Body sections: Summary, Environment (browser/project, base URL), Steps to reproduce,
+               Expected result, Actual result, Error message (short), Evidence (link to the run),
+               Classification + your reasoning, Suggested severity (Critical/High/Medium/Low).
+               Labels: "ai-triaged" plus "bug" for product bugs or "automation-issue" for test problems.
+            6. Never close, edit or delete existing issues. Do not modify code.
+            Finish with a short summary of what you filed.

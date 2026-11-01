@@ -1,0 +1,6 @@
+{
+  "standard": { "username": "standard_user" },
+  "lockedOut": { "username": "locked_out_user" },
+  "problem": { "username": "problem_user" },
+  "invalid": { "username": "not_a_real_user" }
+}
