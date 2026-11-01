@@ -1,0 +1,5 @@
+{
+  "$comment": "AI Explorer guardrails. Only sites you own or that are built for testing practice. Subdomains of a listed domain are allowed (www.saucedemo.com matches saucedemo.com).",
+  "allowedDomains": ["saucedemo.com"],
+  "maxTests": 8
+}
