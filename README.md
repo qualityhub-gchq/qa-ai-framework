@@ -1,6 +1,6 @@
 # QA AI Framework
 
-[![Regression](https://github.com/qualityhub-gchq/qa-ai-framework/actions/workflows/regression.yml/badge.svg)](https://github.com/qualityhub-gchq/qa-ai-framework/actions/workflows/regression.yml) 
+[![Regression](https://github.com/qualityhub-gchq/qa-ai-framework/actions/workflows/regression.yml/badge.svg)](https://github.com/qualityhub-gchq/qa-ai-framework/actions/workflows/regression.yml)
 
 An **AI-assisted test automation framework** built with **Playwright + TypeScript**, using
 **Claude Code** and **Playwright Test Agents** to design test cases, generate and maintain
