@@ -46,16 +46,6 @@ test.describe('Saucedemo login', () => {
   );
 
   test(
-    'TC-SAUCEDEMO-004 empty password shows a required-field error',
-    { tag: '@generated' },
-    async ({ page }) => {
-      await login(page, 'standard_user', '');
-
-      await expect(page.getByTestId('error')).toContainText('Password is required');
-    },
-  );
-
-  test(
     'TC-SAUCEDEMO-005 locked-out user cannot log in',
     { tag: '@generated' },
     async ({ page }) => {
@@ -81,34 +71,6 @@ test.describe('Saucedemo cart', () => {
 
       await expect(page.getByTestId('shopping-cart-badge')).toHaveText('1');
       await expect(page.getByTestId('remove-sauce-labs-backpack')).toBeVisible();
-    },
-  );
-
-  test(
-    'TC-SAUCEDEMO-007 adding multiple products updates the cart count',
-    { tag: '@generated' },
-    async ({ page }) => {
-      await page.getByTestId('add-to-cart-sauce-labs-backpack').click();
-      await page.getByTestId('add-to-cart-sauce-labs-bike-light').click();
-
-      await expect(page.getByTestId('shopping-cart-badge')).toHaveText('2');
-    },
-  );
-
-  test(
-    'TC-SAUCEDEMO-008 removing a product decrements the cart count and cart lists the item',
-    { tag: '@generated' },
-    async ({ page }) => {
-      await page.getByTestId('add-to-cart-sauce-labs-backpack').click();
-      await page.getByTestId('add-to-cart-sauce-labs-bike-light').click();
-      await page.getByTestId('remove-sauce-labs-bike-light').click();
-
-      await expect(page.getByTestId('shopping-cart-badge')).toHaveText('1');
-
-      await page.getByTestId('shopping-cart-link').click();
-      await expect(page).toHaveURL(/cart\.html/);
-      await expect(page.getByText('Sauce Labs Backpack')).toBeVisible();
-      await expect(page.getByText('Sauce Labs Bike Light')).toBeHidden();
     },
   );
 });

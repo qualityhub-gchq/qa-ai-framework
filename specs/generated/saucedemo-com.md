@@ -56,7 +56,7 @@ Demo credentials (shown publicly on the login page): `standard_user`, `locked_ou
   2. Click Login.
 - **Expected result:** Error "Password is required".
 - **Traceability:** Requirement: error on invalid input.
-- **Automated:** Yes (`tests/generated/saucedemo-com/saucedemo.spec.ts`)
+- **Automated:** Yes — promoted to TC-LOGIN-005 (`tests/ui/login.spec.ts`)
 
 ### TC-SAUCEDEMO-005 Locked-out user cannot log in
 
@@ -92,7 +92,7 @@ Demo credentials (shown publicly on the login page): `standard_user`, `locked_ou
   2. Add Sauce Labs Bike Light.
 - **Expected result:** Cart badge shows 2.
 - **Traceability:** Requirement: cart count updates.
-- **Automated:** Yes (`tests/generated/saucedemo-com/saucedemo.spec.ts`)
+- **Automated:** Yes — promoted to TC-CART-003 (`tests/ui/cart.spec.ts`)
 
 ### TC-SAUCEDEMO-008 Remove product decrements count; cart lists remaining item
 
@@ -105,7 +105,7 @@ Demo credentials (shown publicly on the login page): `standard_user`, `locked_ou
   3. Open the cart.
 - **Expected result:** Badge shows 1; cart page lists only the Backpack.
 - **Traceability:** Requirement: cart count updates.
-- **Automated:** Yes (`tests/generated/saucedemo-com/saucedemo.spec.ts`)
+- **Automated:** Yes — promoted to TC-CART-002 (`tests/ui/cart.spec.ts`)
 
 ### TC-SAUCEDEMO-009 Direct access to inventory without login
 
