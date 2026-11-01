@@ -120,3 +120,75 @@ Demo credentials (shown publicly on the login page): `standard_user`, `locked_ou
 ## Result of the automated run
 
 8 passed, 0 `fixme`, no potential bugs found.
+
+---
+
+## Run 2 — problem_user flows
+
+- **Date:** 2026-11-01
+- **Source of expected results:** Requirements provided by human — log in as `problem_user`; each product shows its own correct image; sorting by "Name (Z to A)" and "Price (low to high)" reorders products; adding any product updates the badge and "Remove" removes it; checkout accepts first name, last name and postal code and reaches the overview page.
+
+All cases: **Preconditions:** logged in as `problem_user` / `secret_sauce` (public demo credentials). **Automated:** Yes (`tests/generated/saucedemo-com/problem-user.spec.ts`).
+
+### TC-SAUCEDEMO-010 problem_user can log in
+
+- **Priority:** High · **Type:** Functional
+- **Steps:** Log in as `problem_user`.
+- **Expected result:** Products page with 6 products.
+- **Result:** Pass.
+
+### TC-SAUCEDEMO-011 Each product shows its own image
+
+- **Priority:** High · **Type:** Functional
+- **Steps:** Read the image `src` of all products.
+- **Expected result:** 6 distinct images.
+- **Traceability:** Requirement: each product shows its own correct image.
+- **Result:** `fixme` — **POTENTIAL BUG:** all products show the same image.
+
+### TC-SAUCEDEMO-012 Sort by Name (Z to A)
+
+- **Priority:** High · **Type:** Functional
+- **Steps:** Select "Name (Z to A)".
+- **Expected result:** Products ordered Z to A.
+- **Traceability:** Requirement: sorting reorders products.
+- **Result:** `fixme` — **POTENTIAL BUG:** list stays in A–Z order.
+
+### TC-SAUCEDEMO-013 Sort by Price (low to high)
+
+- **Priority:** High · **Type:** Functional
+- **Steps:** Select "Price (low to high)".
+- **Expected result:** Prices ascending.
+- **Traceability:** Requirement: sorting reorders products.
+- **Result:** `fixme` — **POTENTIAL BUG:** order is 29.99, 9.99, 15.99, 49.99, 7.99, 15.99.
+
+### TC-SAUCEDEMO-014 Add a product updates the badge
+
+- **Priority:** High · **Type:** Functional
+- **Steps:** Add Sauce Labs Backpack.
+- **Expected result:** Badge shows 1; button becomes "Remove".
+- **Result:** Pass.
+
+### TC-SAUCEDEMO-015 Add other products updates the badge
+
+- **Priority:** Medium · **Type:** Functional
+- **Steps:** Add Bike Light and Onesie.
+- **Expected result:** Badge shows 2.
+- **Traceability:** Requirement: adding any product updates the badge.
+- **Result:** Pass.
+
+### TC-SAUCEDEMO-016 Remove button removes the product
+
+- **Priority:** High · **Type:** Functional
+- **Steps:** Add Backpack, click "Remove".
+- **Expected result:** Badge disappears; button returns to "Add to cart".
+- **Result:** `fixme` — **POTENTIAL BUG:** badge remains after Remove.
+
+### TC-SAUCEDEMO-017 Checkout reaches the overview
+
+- **Priority:** High · **Type:** Functional
+- **Steps:** Add Backpack, open cart, Checkout, enter First Name `Test`, Last Name `User`, Postal Code `12345`, Continue.
+- **Expected result:** Checkout: Overview page.
+- **Traceability:** Requirement: checkout accepts first name, last name, postal code.
+- **Result:** `fixme` — **POTENTIAL BUG:** typing the last name overwrites the First Name field; error "Last Name is required".
+
+**Result of run 2:** 8 tests written, 3 passed, 5 `fixme` (potential bugs). Not explored: Remove buttons of other products, cart contents for other items.
