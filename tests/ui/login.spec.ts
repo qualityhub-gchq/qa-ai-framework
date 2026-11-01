@@ -52,4 +52,14 @@ test.describe('Login', () => {
       await expect(loginPage.errorMessage).toContainText('Username is required');
     },
   );
+
+  test(
+    'TC-LOGIN-005 empty password shows a required-field error',
+    { tag: '@regression' },
+    async ({ loginPage }) => {
+      await loginPage.login(users.standard.username, '');
+
+      await expect(loginPage.errorMessage).toContainText('Password is required');
+    },
+  );
 });

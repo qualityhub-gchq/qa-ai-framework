@@ -45,5 +45,6 @@
 
 - **Priority:** Medium
 - **Type:** Negative / Validation
+- **Test data:** `standard_user` / empty password
 - **Expected result:** Error "Password is required"
-- **Automated:** No — candidate for the generator agent (good first exercise)
+- **Automated:** Yes (`tests/ui/login.spec.ts`)
