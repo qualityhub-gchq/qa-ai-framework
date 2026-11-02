@@ -18,3 +18,9 @@ This is a QA automation framework (Playwright + TypeScript). When writing or cha
 - Generated tests live in `tests/generated/<site>/` and plans in `specs/generated/<site>.md`.
 - They import from `@playwright/test`, set `test.use({ baseURL })` per file and are tagged `@generated` only.
 - To promote a reviewed test: move it to `tests/ui/`, refactor it into Page Objects/fixtures, tag `@regression`.
+
+## Skills (`.claude/skills/`)
+
+- `writing-bug-reports`: failing or fixme test → GitHub issue (template, severity rules, duplicate check). Also used by the AI Bug Reporter workflow.
+- `promoting-tests`: reviewed generated tests → regression suite (dedupe, Page Objects, IDs, specs).
+- Change a Skill only through a Pull Request, and re-run its `evals.md` cases after the change.
