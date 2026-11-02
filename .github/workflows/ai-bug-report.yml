@@ -56,24 +56,14 @@ jobs:
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          claude_args: '--model sonnet --max-turns 15 --allowedTools "Read,Glob,Grep,Bash(gh issue list:*),Bash(gh issue create:*),Bash(gh issue comment:*)"'
+          claude_args: '--model sonnet --max-turns 20 --allowedTools "Read,Glob,Grep,Write,Bash(gh issue list:*),Bash(gh issue view:*),Bash(gh issue create:*),Bash(gh issue comment:*)"'
           prompt: |
             You are a senior QA engineer triaging a failed regression run.
             Run URL: ${{ github.event.workflow_run.html_url }}
+            Commit: ${{ github.event.workflow_run.head_sha }} (branch ${{ github.event.workflow_run.head_branch }})
 
-            1. Read test-results/results.json. Consider ONLY tests whose final status is "failed"
-               or "timedOut" after all retries. Ignore tests that passed on retry (flaky) and skipped tests.
-            2. For each failing test, read its error and any error-context.md in test-results/.
-            3. Classify it:
-               - PRODUCT BUG: the app behaves differently from the expected result.
-               - AUTOMATION ISSUE: broken locator, bad test data, environment/network problem.
-            4. Before creating anything, run `gh issue list --state open --search "<test title> in:title"`.
-               If a matching issue exists, add a comment with this run's URL instead of creating a duplicate.
-            5. Otherwise create ONE issue per failing test with:
-               Title: "[Regression] <test title>"
-               Body sections: Summary, Environment (browser/project, base URL), Steps to reproduce,
-               Expected result, Actual result, Error message (short), Evidence (link to the run),
-               Classification + your reasoning, Suggested severity (Critical/High/Medium/Low).
-               Labels: "ai-triaged" plus "bug" for product bugs or "automation-issue" for test problems.
-            6. Never close, edit or delete existing issues. Do not modify code.
-            Finish with a short summary of what you filed.
+            Read and follow .claude/skills/writing-bug-reports/SKILL.md and its linked files exactly.
+            Inputs: test-results/results.json and any error-context.md under test-results/.
+            Only tests whose final status is "failed" or "timedOut" after all retries are candidates.
+            Use the run URL above as evidence in every issue or comment.
+            Do not modify code. Finish with the Skill's summary table.
