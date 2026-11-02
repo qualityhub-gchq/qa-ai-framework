@@ -1,3 +1,7 @@
+// Shared setup for tests: creates the Page Objects and a logged-in page, so tests just ask for
+// them by name (e.g. { loginPage }, { loggedInInventory }). UI tests import test and expect from
+// this file instead of @playwright/test. Each test gets its own new objects, so tests stay independent.
+
 import { test as base, expect } from '@playwright/test';
 import { LoginPage } from '../pages/LoginPage';
 import { InventoryPage } from '../pages/InventoryPage';
