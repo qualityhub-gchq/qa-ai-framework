@@ -7,6 +7,9 @@ import { env } from '../../config/env';
  * Tags: @smoke = fast PR gate, @regression = full nightly suite.
  */
 test.describe('Login', () => {
+  // These tests exercise the login itself, so they start logged out.
+  test.use({ storageState: { cookies: [], origins: [] } });
+
   test.beforeEach(async ({ loginPage }) => {
     await loginPage.goto();
   });

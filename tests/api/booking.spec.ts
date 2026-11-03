@@ -27,7 +27,7 @@ test.describe('Booking API', () => {
         data: { username: env.apiUsername, password: env.apiPassword },
       });
 
-      expect(response.ok()).toBeTruthy();
+      expect(response.status()).toBe(200);
       const body = await response.json();
       expect(body.token).toEqual(expect.any(String));
     },
@@ -56,4 +56,23 @@ test.describe('Booking API', () => {
 
     expect(response.status()).toBe(404);
   });
+
+  test(
+    'TC-API-005 updating a booking without a token is rejected',
+    { tag: '@regression' },
+    async ({ request }) => {
+      const booking = buildBooking();
+      const createResponse = await request.post('/booking', { data: booking });
+      expect(createResponse.ok()).toBeTruthy();
+      const { bookingid } = await createResponse.json();
+
+      const updateResponse = await request.put(`/booking/${bookingid}`, {
+        data: buildBooking({ firstname: 'Unauthorized' }),
+      });
+
+      expect(updateResponse.status()).toBe(403);
+      const getResponse = await request.get(`/booking/${bookingid}`);
+      expect(await getResponse.json()).toMatchObject(booking);
+    },
+  );
 });

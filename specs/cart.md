@@ -9,7 +9,7 @@
 - **Preconditions:** Logged in as `standard_user`, cart empty
 - **Steps:** 1. On "Products", click **Add to cart** for "Sauce Labs Backpack"
 - **Expected result:** Cart badge shows `1`; button changes to **Remove**
-- **Automated:** Yes (`tests/ui/cart.spec.ts`) — @smoke (badge only; button state is a TODO)
+- **Automated:** Yes (`tests/ui/cart.spec.ts`) — @smoke
 
 ### TC-CART-002 Removing a product decrements the badge and removes it from the cart
 

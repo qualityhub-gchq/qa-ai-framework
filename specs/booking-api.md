@@ -8,5 +8,5 @@
 | TC-API-002 | `POST /auth` with valid credentials      | High     | `200` + `token` string                 | Yes          |
 | TC-API-003 | Create booking, then `GET /booking/{id}` | High     | Returned booking matches what was sent | Yes · @smoke |
 | TC-API-004 | `GET /booking/{unknown id}`              | Medium   | `404`                                  | Yes          |
-| TC-API-005 | `PUT /booking/{id}` without token        | High     | `403`                                  | No — Phase 3 |
-| TC-API-006 | `DELETE /booking/{id}` with token        | Medium   | `201`, then GET returns `404`          | No — Phase 3 |
+| TC-API-005 | `PUT /booking/{id}` without token        | High     | `403`; the booking is unchanged        | Yes          |
+| TC-API-006 | `DELETE /booking/{id}` with token        | Medium   | `201`, then GET returns `404`          | No           |

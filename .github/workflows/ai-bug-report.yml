@@ -1,4 +1,4 @@
-# AI Bug Reporter — DRAFT, finalized in Phase 5.
+# AI Bug Reporter
 # Runs after a Regression run FAILS, reads the results and opens GitHub Issues.
 #
 # OFF by default. To enable:

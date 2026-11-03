@@ -26,12 +26,14 @@ export class InventoryPage {
       .click();
   }
 
+  /** The Remove button of a product, shown once that product is in the cart. */
+  removeButton(productName: string): Locator {
+    return this.items.filter({ hasText: productName }).getByRole('button', { name: 'Remove' });
+  }
+
   /** Removes a product from the cart using its visible name, e.g. "Sauce Labs Backpack". */
   async removeFromCart(productName: string): Promise<void> {
-    await this.items
-      .filter({ hasText: productName })
-      .getByRole('button', { name: 'Remove' })
-      .click();
+    await this.removeButton(productName).click();
   }
 
   async openCart(): Promise<void> {

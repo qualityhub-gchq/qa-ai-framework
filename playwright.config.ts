@@ -7,6 +7,7 @@ import dotenv from 'dotenv';
 dotenv.config({ quiet: true });
 
 const isCI = !!process.env.CI;
+const uiBaseURL = process.env.UI_BASE_URL || 'https://www.saucedemo.com';
 
 export default defineConfig({
   testDir: './tests',
@@ -37,11 +38,20 @@ export default defineConfig({
 
   projects: [
     {
+      // Logs in once and saves the session for the ui project.
+      name: 'setup',
+      testDir: './tests/setup',
+      testMatch: /.*\.setup\.ts/,
+      use: { ...devices['Desktop Chrome'], baseURL: uiBaseURL },
+    },
+    {
       name: 'ui',
       testDir: './tests/ui',
+      dependencies: ['setup'],
       use: {
         ...devices['Desktop Chrome'],
-        baseURL: process.env.UI_BASE_URL || 'https://www.saucedemo.com',
+        baseURL: uiBaseURL,
+        storageState: 'playwright/.auth/user.json',
       },
     },
     {
