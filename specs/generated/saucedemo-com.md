@@ -192,3 +192,70 @@ All cases: **Preconditions:** logged in as `problem_user` / `secret_sauce` (publ
 - **Result:** `fixme` — **POTENTIAL BUG:** typing the last name overwrites the First Name field; error "Last Name is required".
 
 **Result of run 2:** 8 tests written, 3 passed, 5 `fixme` (potential bugs). Not explored: Remove buttons of other products, cart contents for other items.
+
+---
+
+## Run 3 — Broken links check
+
+- **Date:** 2026-11-03
+- **Source of expected results:** Requirements provided by human — "Verify there is not broken links".
+
+Approach: same-origin links are followed and checked; external links (About, social media) are **not followed** (the explorer stays on the origin) — only their `href` is verified. Network responses with status >= 400 count as broken resources. All cases use the public demo credentials `standard_user` / `secret_sauce`. **Automated:** Yes (`tests/generated/saucedemo-com/links.spec.ts`) unless noted.
+
+### TC-SAUCEDEMO-018 Login page has no failed requests or broken images
+
+- **Priority:** High · **Type:** Functional
+- **Steps:** Open `/`, wait for network idle.
+- **Expected result:** No response with status >= 400; all images load.
+- **Traceability:** Requirement: no broken links.
+- **Result:** Pass.
+
+### TC-SAUCEDEMO-019 Inventory page has no failed requests
+
+- **Priority:** High · **Type:** Functional
+- **Steps:** Log in, wait for network idle.
+- **Expected result:** No response with status >= 400.
+- **Result:** Pass.
+
+### TC-SAUCEDEMO-020 Every product image loads
+
+- **Priority:** Medium · **Type:** Functional
+- **Steps:** Log in, check all 6 product images are loaded (`naturalWidth > 0`).
+- **Expected result:** No broken images.
+- **Result:** Pass.
+
+### TC-SAUCEDEMO-021 Every product link opens its own details page
+
+- **Priority:** High · **Type:** Functional
+- **Steps:** For each product, open its details, check the name, click "Back to products".
+- **Expected result:** Details page of the same product; back returns to the inventory.
+- **Result:** Pass.
+
+### TC-SAUCEDEMO-022 Cart link and Continue Shopping
+
+- **Priority:** Medium · **Type:** Functional
+- **Steps:** Click the cart icon, then "Continue Shopping".
+- **Expected result:** Cart page opens; back on the inventory page.
+- **Result:** Pass.
+
+### TC-SAUCEDEMO-023 Menu links work
+
+- **Priority:** Medium · **Type:** Functional
+- **Steps:** From the cart, open the menu, check the About `href` (not followed), click All Items, then Logout.
+- **Expected result:** About → `https://saucelabs.com/`; All Items → inventory; Logout → login page.
+- **Result:** Pass.
+
+### TC-SAUCEDEMO-024 Footer social links have valid targets
+
+- **Priority:** Low · **Type:** Validation
+- **Steps:** Check the `href` of the X, Facebook and LinkedIn footer links (not followed).
+- **Expected result:** Links point to the Sauce Labs profiles.
+- **Result:** Pass.
+
+### TC-SAUCEDEMO-025 Terms of Service / Privacy Policy
+
+- **Priority:** Low · **Type:** Functional
+- **Expected result:** If shown as links, they resolve.
+- **Automated:** No — they are plain text in the footer, not links.
+
+**Result of run 3:** 7 tests written, 7 passed, 0 `fixme`, no broken links found. Not covered: availability of external links (not followed by design), "Dynamic Catalog" menu item, other user types.
