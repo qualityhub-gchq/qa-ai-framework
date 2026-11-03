@@ -11,6 +11,7 @@ test.describe('Cart', () => {
       await loggedInInventory.addToCart('Sauce Labs Backpack');
 
       await expect(loggedInInventory.cartBadge).toHaveText('1');
+      await expect(loggedInInventory.removeButton('Sauce Labs Backpack')).toBeVisible();
     },
   );
 
