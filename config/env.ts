@@ -1,3 +1,5 @@
+// The one place where tests read environment settings (passwords and API credentials)
+
 /**
  * Single place to read environment variables.
  * Tests never call process.env directly — this keeps configuration easy to find and change.

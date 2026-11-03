@@ -1,3 +1,5 @@
+// Timeouts, retries, reports and projects (ui, api, explorer)
+
 import { defineConfig, devices } from '@playwright/test';
 import dotenv from 'dotenv';
 
