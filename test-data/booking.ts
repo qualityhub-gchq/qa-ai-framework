@@ -1,3 +1,5 @@
+// Test data, including buildBooking(), which creates fresh data for each test
+
 /**
  * Test data builder for Restful-Booker bookings.
  * Builders give every test fresh, valid data and let a test override only what it cares about.
