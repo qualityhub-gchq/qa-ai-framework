@@ -153,6 +153,24 @@ Skills are short, versioned **SOPs for the AI**: a `SKILL.md` with the steps for
 
 Practices followed: one job per Skill · short `SKILL.md` (under 70 lines) with details in reference files one level deep · clear "what + when" descriptions · house rules stay in `CLAUDE.md` (not copied) · a validation step before "done" · each Skill has an `evals.md` with real cases from this project · changed only through Pull Requests.
 
+## How I trust AI output
+
+AI writes the first draft; these checks decide whether it is good enough.
+
+1. **Spec first:** every test traces to a test case ID in `specs/`, so reviewers can compare against intent, not against what the app happens to do.
+2. **Rules enforced by tooling:** `CLAUDE.md` tells the AI the rules, ESLint and TypeScript fail the build if it ignores them.
+3. **Review like a PR:** the review prompt in [PROMPTS.md](PROMPTS.md) checks a draft for weak assertions, duplicates and rule violations.
+4. **Flakiness check:** `npx playwright test <file> --repeat-each=10` before anything is promoted.
+5. **Can it fail?** Break the feature on purpose once. A test that stays green is not a test.
+6. **AI does not grade itself:** the workflow re-runs generated tests independently of Claude.
+7. **Human approval:** generated tests stay `@generated` until a person promotes them through a Pull Request.
+
+## AI risk controls
+
+Secrets only in `.env` (git-ignored) and GitHub Secrets · Explorer runs only on allowlisted https domains ·
+no destructive or real-world actions, no real personal data · generated PRs can only change `specs/generated/`
+and `tests/generated/` · Skills change only through Pull Requests, with `evals.md` re-run.
+
 ## Best practices applied
 
 - **Human-in-the-loop:** AI drafts, a QA engineer reviews every plan, test and bug.
