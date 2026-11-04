@@ -175,7 +175,6 @@ Practices followed: one job per Skill · short `SKILL.md` (under 70 lines) with 
 - [x] Phase 1 — Framework setup, POM, fixtures, sample UI + API tests, CI
 - [x] Phase 2 — AI Explorer: URL → test plan → automated tests → draft PR
 - [x] Phase 3 — Human review + promotion of AI tests into the regression suite
-- [ ] Phase 4 — Publish HTML report to GitHub Pages
 - [x] Phase 5 — AI Bug Reporter: failed regression runs become GitHub Issues
 - [x] Claude Skills for bug reports and test promotion (shared by local use and CI)
 - [ ] Phase 6 — Demo GIF, sample AI-filed issue
