@@ -23,7 +23,7 @@ export default defineConfig({
   reporter: [
     ['list'],
     ['html', { open: 'never', outputFolder: 'playwright-report' }],
-    // Machine-readable results: consumed later by the AI bug-reporter agent (Phase 5).
+    // Machine-readable results: consumed later by the AI bug-reporter agent.
     ['json', { outputFile: 'test-results/results.json' }],
     ...(isCI ? [['github'] as ['github']] : []),
   ],
