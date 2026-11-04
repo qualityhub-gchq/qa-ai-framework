@@ -60,6 +60,7 @@ automated tests, and triage failures into **GitHub Issues** — all running in *
 ├── fixtures/              # Custom Playwright fixtures (page objects, logged-in state)
 ├── pages/                 # Page Object Model
 ├── specs/                 # Test plans / test cases (Markdown)
+├── PROMPTS.md             # Reusable prompts for the AI workflow
 ├── test-data/             # Test data + builders
 ├── tests/
 │   ├── setup/             # Logs in once and saves the session (storageState) for the UI tests
