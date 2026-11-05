@@ -8,8 +8,8 @@ export default tseslint.config(
   js.configs.recommended,
   ...tseslint.configs.recommended,
   {
-    // Node.js helper scripts (AI Explorer)
-    files: ['scripts/**/*.mjs'],
+    // Node.js helper scripts (AI Explorer) and Claude Code hooks
+    files: ['scripts/**/*.mjs', '.claude/hooks/**/*.mjs'],
     languageOptions: { globals: { process: 'readonly', console: 'readonly', URL: 'readonly' } },
   },
   {
