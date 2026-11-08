@@ -7,8 +7,11 @@
 import { readFileSync } from 'node:fs';
 
 const input = JSON.parse(readFileSync(0, 'utf8'));
-const { file_path: filePath = '', new_string: newString, content } = input.tool_input ?? {};
-const text = newString ?? content ?? '';
+const { file_path: filePath = '', new_string: newString, content, edits } = input.tool_input ?? {};
+// Edit sends new_string, Write sends content, MultiEdit sends edits[].new_string.
+const text = Array.isArray(edits)
+  ? edits.map((e) => e.new_string ?? '').join('\n')
+  : (newString ?? content ?? '');
 
 // Only guard test code (tests/, pages/, fixtures/), not docs or config.
 const guarded = /(^|\/)(tests|pages|fixtures)\//.test(filePath) && filePath.endsWith('.ts');
