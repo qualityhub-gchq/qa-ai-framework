@@ -14,6 +14,6 @@ Tip: to avoid creating real issues while evaluating, add "draft only, do not run
 
 Record results here when you run them:
 
-| Date | Skill version (commit) | 1   | 2   | 3   | 4   | 5   | Notes |
-| ---- | ---------------------- | --- | --- | --- | --- | --- | ----- |
-|      |                        |     |     |     |     |     |       |
+| Date       | Skill version (commit) | 1    | 2    | 3    | 4    | 5    | Notes                                                                                                                                                                                                                                                                                                                                            |
+| ---------- | ---------------------- | ---- | ---- | ---- | ---- | ---- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 2026-11-08 | 7484c8f                | Pass | Pass | Pass | Pass | Pass | Run as draft-only in fresh sub-agents. Cases 1-4 matched an existing open issue (#5, #9, #7, #6), so the Skill chose "comment, don't create"; content criteria still met. Case 4 also found #10, an open duplicate of #6 that the CI bug reporter filed. Case 5 left the file path, TC-ID and user as placeholders because the prompt gave none. |

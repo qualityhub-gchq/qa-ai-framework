@@ -11,6 +11,6 @@ Run each case on a throwaway branch in a **fresh** Claude Code session, check th
 
 Record results here when you run them:
 
-| Date | Skill version (commit) | 1   | 2   | 3   | 4   | Notes |
-| ---- | ---------------------- | --- | --- | --- | --- | ----- |
-|      |                        |     |     |     |     |       |
+| Date       | Skill version (commit) | 1    | 2    | 3    | 4    | Notes                                                                                                                                                                                                                                      |
+| ---------- | ---------------------- | ---- | ---- | ---- | ---- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 2026-11-08 | 7484c8f                | Pass | Pass | Pass | Pass | Run in fresh sub-agents on throwaway worktrees. Case 4 (from the TC-SAUCEDEMO-002 run): lint and typecheck clean, `npm test` 16 passed, 0 failed. No `.env` was present in the worktrees (a hook blocks copying it) and nothing needed it. |
