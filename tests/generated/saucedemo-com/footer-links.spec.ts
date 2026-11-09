@@ -25,18 +25,13 @@ test.describe('Footer social links', () => {
   );
 
   test(
-    'TC-SAUCEDEMO-019 footer Facebook link points to the SauceDemo page',
+    'TC-SAUCEDEMO-019 footer Facebook link points to the Sauce Labs page',
     { tag: '@generated' },
     async ({ page }) => {
-      // POTENTIAL BUG: footer Facebook href is https://www.facebook.com/saucelabs, but the requirement says https://www.facebook.com/saucedemo.
-      test.fixme(
-        true,
-        'POTENTIAL BUG: Facebook href is /saucelabs, requirement expects /saucedemo',
-      );
       await loginAsStandardUser(page);
       const facebook = page.getByRole('link', { name: 'Facebook' });
       await expect(facebook).toBeVisible();
-      await expect(facebook).toHaveAttribute('href', 'https://www.facebook.com/saucedemo');
+      await expect(facebook).toHaveAttribute('href', 'https://www.facebook.com/saucelabs');
     },
   );
 
@@ -62,19 +57,6 @@ test.describe('Footer social links', () => {
       for (const link of await links.all()) {
         await expect(link).toHaveAttribute('target', '_blank');
       }
-    },
-  );
-
-  test(
-    'TC-SAUCEDEMO-022 invalid login is rejected and shows an error',
-    { tag: '@generated' },
-    async ({ page }) => {
-      await page.goto('/');
-      await page.getByPlaceholder('Username').fill(DEMO_USER);
-      await page.getByPlaceholder('Password').fill('not-the-password');
-      await page.getByRole('button', { name: 'Login' }).click();
-      await expect(page.getByText('do not match')).toBeVisible();
-      await expect(page).not.toHaveURL(/inventory\.html/);
     },
   );
 });

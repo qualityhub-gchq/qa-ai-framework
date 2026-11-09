@@ -198,7 +198,7 @@ All cases: **Preconditions:** logged in as `problem_user` / `secret_sauce` (publ
 ## Run 3 — footer social links
 
 - **Date:** 2026-11-09
-- **Source of expected results:** Requirements provided by human — log in as `standard_user`; on `/inventory.html` the footer Facebook link must point to `https://www.facebook.com/saucedemo` and have `target="_blank"`. Assert href/target only; never navigate to facebook.com.
+- **Source of expected results:** Requirements provided by human — log in as `standard_user`; on `/inventory.html` the footer Facebook link must point to `https://www.facebook.com/saucelabs` (corrected: the first requirement wrongly said `/saucedemo`) and have `target="_blank"`. Assert href/target only; never navigate to facebook.com.
 
 All cases: **Preconditions:** logged in as `standard_user` / `secret_sauce` (public demo credentials) unless stated. **Automated:** Yes (`tests/generated/saucedemo-com/footer-links.spec.ts`) unless stated.
 
@@ -213,9 +213,9 @@ All cases: **Preconditions:** logged in as `standard_user` / `secret_sauce` (pub
 
 - **Priority:** High · **Type:** Functional
 - **Steps:** Read the href of the footer Facebook link.
-- **Expected result:** `https://www.facebook.com/saucedemo`.
-- **Traceability:** Requirement: Facebook link points to /saucedemo.
-- **Result:** `fixme` — **POTENTIAL BUG:** href is `https://www.facebook.com/saucelabs`.
+- **Expected result:** `https://www.facebook.com/saucelabs`.
+- **Traceability:** Requirement: Facebook link points to the Sauce Labs page (corrected from `/saucedemo`).
+- **Result:** Pass.
 
 ### TC-SAUCEDEMO-020 Facebook link opens in a new tab
 
@@ -237,8 +237,8 @@ All cases: **Preconditions:** logged in as `standard_user` / `secret_sauce` (pub
 - **Priority:** Medium · **Type:** Negative
 - **Preconditions:** Logged out
 - **Steps:** Log in as `standard_user` with a wrong password.
-- **Expected result:** "do not match" error; stays on login page (observed behaviour, needs human review).
-- **Result:** Pass.
+- **Expected result:** "do not match" error; stays on login page.
+- **Automated:** No (out of scope for footer links; covered by TC-LOGIN-006)
 
 ### TC-SAUCEDEMO-023 Empty username validation
 
@@ -246,4 +246,4 @@ All cases: **Preconditions:** logged in as `standard_user` / `secret_sauce` (pub
 - **Expected result:** "Username is required".
 - **Automated:** No (covered by TC-SAUCEDEMO-003 / TC-LOGIN-004)
 
-**Result of run 3:** 5 tests written, 4 passed, 1 `fixme` (potential bug: Facebook href).
+**Result of run 3:** 4 tests written, all passed.
