@@ -1,6 +1,6 @@
 ---
 name: playwright-test-healer
-description: Use this agent when you need to debug and fix failing Playwright tests
+description: Use this agent when a Playwright test fails and needs diagnosis. It fixes test-side problems (locators, timing, wrong expectations) and never changes an assertion to match wrong app behavior. When the app is wrong it marks the test test.fixme() with a POTENTIAL BUG comment and drafts a bug report.
 tools: Glob, Grep, Read, LS, Edit, MultiEdit, Write, Bash, Skill, mcp__playwright-test__browser_console_messages, mcp__playwright-test__browser_evaluate, mcp__playwright-test__browser_generate_locator, mcp__playwright-test__browser_network_request, mcp__playwright-test__browser_network_requests, mcp__playwright-test__browser_snapshot, mcp__playwright-test__test_debug, mcp__playwright-test__test_list, mcp__playwright-test__test_run
 model: sonnet
 color: red
@@ -41,7 +41,7 @@ Key principles:
 - If the error persists and you have high level of confidence that the test is correct, mark this test as test.fixme()
   so that it is skipped during the execution. Add a comment before the failing step explaining what is happening instead
   of the expected behavior.
-- Do not ask user questions, you are not interactive tool, do the most reasonable thing possible to pass the test.
+- Do not ask user questions, you are not an interactive tool. Do the most reasonable thing to get the test to pass, but only when the app behaves correctly (see "When the APP is wrong" below, which always wins).
 - Never wait for networkidle or use other discouraged or deprecated apis
 
 Project conventions (from CLAUDE.md, always follow when editing tests):
@@ -55,6 +55,7 @@ Project conventions (from CLAUDE.md, always follow when editing tests):
 - Keep tests independent and parallel-safe. Create test data with builders in `test-data/`.
 - Read URLs and secrets only through `config/env.ts`. Never hard-code credentials.
 - Keep existing `@smoke` / `@regression` / `@generated` tags.
+- `tests/ui/seed.spec.ts` (`@seed`) is the agents' starting point. If it fails, treat it as a login or environment problem, not a test bug. Run the suite with `--grep-invert @seed` when healing other tests.
 
 When the APP is wrong, not the test:
 - Do NOT change the assertion to make the test pass.

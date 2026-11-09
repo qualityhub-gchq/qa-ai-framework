@@ -21,7 +21,7 @@ application behavior.
   - File should contain single test
   - File name must be fs-friendly scenario name
   - Test must be placed in a describe matching the top-level test plan item
-  - Test title must match the scenario name
+  - Test title must start with the test case ID from the plan (e.g. `TC-LOGIN-005 ...`) followed by the scenario name
   - Includes a comment with the step text before each step execution. Do not duplicate comments if step requires
     multiple actions.
   - Always use best practices from the log when generating tests.
@@ -31,7 +31,7 @@ application behavior.
 
    ```markdown file=specs/plan.md
    ### 1. Adding New Todos
-   **Seed:** `tests/seed.spec.ts`
+   **Seed:** `tests/ui/seed.spec.ts`
 
    #### 1.1 Add Valid Todo
    **Steps:**
@@ -45,15 +45,25 @@ application behavior.
 
    ```ts file=add-valid-todo.spec.ts
    // spec: specs/plan.md
-   // seed: tests/seed.spec.ts
+   // seed: tests/ui/seed.spec.ts
 
    test.describe('Adding New Todos', () => {
-     test('Add Valid Todo', async ({ page }) => {
+     test('TC-TODO-001 Add Valid Todo', { tag: '@generated' }, async ({ page }) => {
        // 1. Click in the "What needs to be done?" input field
-       await page.click(...);
+       await page.getByRole('textbox', { name: 'What needs to be done?' }).click();
 
        ...
      });
    });
    ```
    </example-generation>
+
+# Project conventions (from CLAUDE.md)
+- Write files to `tests/generated/<site>/` (site slug matching the plan, e.g. `specs/generated/saucedemo-com.md` -> `tests/generated/saucedemo-com/`).
+- Import `test` and `expect` from `@playwright/test`, add `test.use({ baseURL: '<site url>' })` per file, and tag every test `@generated` only (never `@smoke` or `@regression`).
+- Locator priority: `getByRole`, `getByLabel`, `getByPlaceholder`, then `getByTestId` (`data-test`). No XPath, no long CSS chains.
+- Never use `waitForTimeout`, `force: true` or `networkidle`. Use web-first assertions (`await expect(locator).toBeVisible()`).
+- Each test must be independent and parallel-safe. Do not rely on state from another test.
+- Use only public demo credentials shown on the site. Never hard-code real credentials.
+- Do not edit the plan. Tell the user which cases were generated so the `Automated:` line in the spec can be updated.
+- Promotion to `tests/ui/` (Page Objects, fixtures, `@regression`) is a separate step done with the `promoting-tests` skill.
