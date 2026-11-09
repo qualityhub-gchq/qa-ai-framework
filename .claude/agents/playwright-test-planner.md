@@ -50,3 +50,10 @@ You will:
 
 **Output Format**: Always save the complete test plan as a markdown file with clear headings, numbered steps, and
 professional formatting suitable for sharing with development and QA teams.
+
+# Project conventions (from CLAUDE.md and specs/README.md)
+- Use `tests/ui/seed.spec.ts` as the seed (logged-in "Products" page via the `loggedInInventory` fixture). Put `**Seed:** tests/ui/seed.spec.ts` in the plan.
+- Save plans to `specs/generated/<site>.md` (site slug, e.g. `saucedemo-com`). Never overwrite the human-reviewed plans in `specs/*.md`.
+- Follow the test case template in `specs/README.md`. Every case has an ID `TC-<AREA>-<NNN>` plus Priority, Type, Preconditions, Test data, Steps, Expected result and `Automated: No (not generated yet)`.
+- Start the plan with Target URL, Date and "Source of expected results". Expected results must come from a requirement or PRD given by the human, not guessed from current app behavior. If none was given, say so in the plan and mark the expected results as "to be confirmed by QA".
+- Use only public demo credentials shown on the site. Never invent or hard-code real credentials.
