@@ -192,3 +192,58 @@ All cases: **Preconditions:** logged in as `problem_user` / `secret_sauce` (publ
 - **Result:** `fixme` — **POTENTIAL BUG:** typing the last name overwrites the First Name field; error "Last Name is required".
 
 **Result of run 2:** 8 tests written, 3 passed, 5 `fixme` (potential bugs). Not explored: Remove buttons of other products, cart contents for other items.
+
+---
+
+## Run 3 — footer social links
+
+- **Date:** 2026-11-09
+- **Source of expected results:** Requirements provided by human — log in as `standard_user`; on `/inventory.html` the footer Facebook link must point to `https://www.facebook.com/saucedemo` and have `target="_blank"`. Assert href/target only; never navigate to facebook.com.
+
+All cases: **Preconditions:** logged in as `standard_user` / `secret_sauce` (public demo credentials) unless stated. **Automated:** Yes (`tests/generated/saucedemo-com/footer-links.spec.ts`) unless stated.
+
+### TC-SAUCEDEMO-018 Standard user lands on Products page
+
+- **Priority:** High · **Type:** Functional
+- **Steps:** Open `/`, log in.
+- **Expected result:** URL is `/inventory.html`, "Products" visible.
+- **Result:** Pass.
+
+### TC-SAUCEDEMO-019 Facebook link href
+
+- **Priority:** High · **Type:** Functional
+- **Steps:** Read the href of the footer Facebook link.
+- **Expected result:** `https://www.facebook.com/saucedemo`.
+- **Traceability:** Requirement: Facebook link points to /saucedemo.
+- **Result:** `fixme` — **POTENTIAL BUG:** href is `https://www.facebook.com/saucelabs`.
+
+### TC-SAUCEDEMO-020 Facebook link opens in a new tab
+
+- **Priority:** High · **Type:** Functional
+- **Steps:** Read `target` of the footer Facebook link.
+- **Expected result:** `target="_blank"`.
+- **Traceability:** Requirement: opens in a new tab.
+- **Result:** Pass.
+
+### TC-SAUCEDEMO-021 All footer social links open in a new tab
+
+- **Priority:** Medium · **Type:** Functional
+- **Steps:** Check `target` of all 3 footer links.
+- **Expected result:** each is `_blank` (observed behaviour, needs human review).
+- **Result:** Pass.
+
+### TC-SAUCEDEMO-022 Invalid password is rejected
+
+- **Priority:** Medium · **Type:** Negative
+- **Preconditions:** Logged out
+- **Steps:** Log in as `standard_user` with a wrong password.
+- **Expected result:** "do not match" error; stays on login page (observed behaviour, needs human review).
+- **Result:** Pass.
+
+### TC-SAUCEDEMO-023 Empty username validation
+
+- **Priority:** Medium · **Type:** Validation
+- **Expected result:** "Username is required".
+- **Automated:** No (covered by TC-SAUCEDEMO-003 / TC-LOGIN-004)
+
+**Result of run 3:** 5 tests written, 4 passed, 1 `fixme` (potential bug: Facebook href).
