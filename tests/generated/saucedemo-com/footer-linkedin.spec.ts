@@ -16,7 +16,7 @@ async function loginAsStandardUser(page: Page) {
 
 test.describe('Saucedemo footer LinkedIn link', () => {
   test(
-    'TC-SAUCEDEMO-018 LinkedIn footer link is visible with the correct href and target',
+    'TC-SAUCEDEMO-024 LinkedIn footer link is visible with the correct href and target',
     { tag: '@generated' },
     async ({ page }) => {
       // POTENTIAL BUG: href is "https://www.linkedin.com/company/sauce-labs/" (no "home/" suffix),
@@ -32,7 +32,7 @@ test.describe('Saucedemo footer LinkedIn link', () => {
   );
 
   test(
-    'TC-SAUCEDEMO-019 clicking the LinkedIn footer link opens a new tab',
+    'TC-SAUCEDEMO-025 clicking the LinkedIn footer link opens a new tab',
     { tag: '@generated' },
     async ({ page }) => {
       await loginAsStandardUser(page);

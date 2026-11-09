@@ -193,13 +193,70 @@ All cases: **Preconditions:** logged in as `problem_user` / `secret_sauce` (publ
 
 **Result of run 2:** 8 tests written, 3 passed, 5 `fixme` (potential bugs). Not explored: Remove buttons of other products, cart contents for other items.
 
-## Run 3 — LinkedIn footer link
+---
+
+## Run 3 — footer social links
+
+- **Date:** 2026-11-09
+- **Source of expected results:** Requirements provided by human — log in as `standard_user`; on `/inventory.html` the footer Facebook link must point to `https://www.facebook.com/saucelabs` (corrected: the first requirement wrongly said `/saucedemo`) and have `target="_blank"`. Assert href/target only; never navigate to facebook.com.
+
+All cases: **Preconditions:** logged in as `standard_user` / `secret_sauce` (public demo credentials) unless stated. **Automated:** Yes (`tests/generated/saucedemo-com/footer-links.spec.ts`) unless stated.
+
+### TC-SAUCEDEMO-018 Standard user lands on Products page
+
+- **Priority:** High · **Type:** Functional
+- **Steps:** Open `/`, log in.
+- **Expected result:** URL is `/inventory.html`, "Products" visible.
+- **Result:** Pass.
+
+### TC-SAUCEDEMO-019 Facebook link href
+
+- **Priority:** High · **Type:** Functional
+- **Steps:** Read the href of the footer Facebook link.
+- **Expected result:** `https://www.facebook.com/saucelabs`.
+- **Traceability:** Requirement: Facebook link points to the Sauce Labs page (corrected from `/saucedemo`).
+- **Result:** Pass.
+
+### TC-SAUCEDEMO-020 Facebook link opens in a new tab
+
+- **Priority:** High · **Type:** Functional
+- **Steps:** Read `target` of the footer Facebook link.
+- **Expected result:** `target="_blank"`.
+- **Traceability:** Requirement: opens in a new tab.
+- **Result:** Pass.
+
+### TC-SAUCEDEMO-021 All footer social links open in a new tab
+
+- **Priority:** Medium · **Type:** Functional
+- **Steps:** Check `target` of all 3 footer links.
+- **Expected result:** each is `_blank` (observed behaviour, needs human review).
+- **Result:** Pass.
+
+### TC-SAUCEDEMO-022 Invalid password is rejected
+
+- **Priority:** Medium · **Type:** Negative
+- **Preconditions:** Logged out
+- **Steps:** Log in as `standard_user` with a wrong password.
+- **Expected result:** "do not match" error; stays on login page.
+- **Automated:** No (out of scope for footer links; covered by TC-LOGIN-006)
+
+### TC-SAUCEDEMO-023 Empty username validation
+
+- **Priority:** Medium · **Type:** Validation
+- **Expected result:** "Username is required".
+- **Automated:** No (covered by TC-SAUCEDEMO-003 / TC-LOGIN-004)
+
+**Result of run 3:** 4 tests written, all passed.
+
+---
+
+## Run 4 — LinkedIn footer link
 
 **Source of expected results:** Requirements provided by human — LinkedIn footer link on the inventory page (logged in as `standard_user`): visible, href `https://www.linkedin.com/company/sauce-labs/home/`, `target="_blank"`, opens a new tab whose URL is that page or a linkedin.com login/authwall redirect.
 
-> Note: the input said the highest ID was 023, but only IDs up to 017 exist in `specs/` and `tests/`, and `footer-links.spec.ts` does not exist. IDs therefore continue at 018. Please check for a mismatch with another branch.
+> Note: IDs 018–023 are used by Run 3 (Facebook footer links, branch `-6`); this run continues at 024.
 
-### TC-SAUCEDEMO-018 LinkedIn footer link has the correct href and target
+### TC-SAUCEDEMO-024 LinkedIn footer link has the correct href and target
 
 - **Priority:** Medium · **Type:** Functional
 - **Preconditions:** Logged in as `standard_user` on the inventory page
@@ -209,7 +266,7 @@ All cases: **Preconditions:** logged in as `problem_user` / `secret_sauce` (publ
 - **Automated:** Yes (`tests/generated/saucedemo-com/footer-linkedin.spec.ts`)
 - **Result:** `fixme` — **POTENTIAL BUG:** href is `https://www.linkedin.com/company/sauce-labs/` (missing `home/`). `target="_blank"` is correct.
 
-### TC-SAUCEDEMO-019 LinkedIn footer link opens a new tab
+### TC-SAUCEDEMO-025 LinkedIn footer link opens a new tab
 
 - **Priority:** Medium · **Type:** Functional
 - **Preconditions:** Logged in as `standard_user` on the inventory page
