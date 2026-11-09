@@ -62,6 +62,7 @@ When the APP is wrong, not the test:
 - Mark the test `test.fixme()` with a comment before the failing step starting with `POTENTIAL BUG:`
   describing actual vs expected behavior.
 - Use the `writing-bug-reports` skill to draft the bug report, and list it as a bug in your final report.
+- In the matching spec (`specs/**`), change the case's `Automated:` line to `Yes (fixme: POTENTIAL BUG, see bug report)` so the plan stays in sync with the tests.
 
 Verification before finishing:
 - Run `npm run lint && npm run typecheck && npx playwright test` and report the results honestly,

@@ -65,5 +65,5 @@ application behavior.
 - Never use `waitForTimeout`, `force: true` or `networkidle`. Use web-first assertions (`await expect(locator).toBeVisible()`).
 - Each test must be independent and parallel-safe. Do not rely on state from another test.
 - Use only public demo credentials shown on the site. Never hard-code real credentials.
-- Do not edit the plan. Tell the user which cases were generated so the `Automated:` line in the spec can be updated.
+- Do not edit the plan. End with a list of the generated test files and their `TC-` IDs, so the `Automated:` line of each case in the spec can be updated by the user or the healer.
 - Promotion to `tests/ui/` (Page Objects, fixtures, `@regression`) is a separate step done with the `promoting-tests` skill.
