@@ -192,3 +192,29 @@ All cases: **Preconditions:** logged in as `problem_user` / `secret_sauce` (publ
 - **Result:** `fixme` — **POTENTIAL BUG:** typing the last name overwrites the First Name field; error "Last Name is required".
 
 **Result of run 2:** 8 tests written, 3 passed, 5 `fixme` (potential bugs). Not explored: Remove buttons of other products, cart contents for other items.
+
+## Run 3 — LinkedIn footer link
+
+**Source of expected results:** Requirements provided by human — LinkedIn footer link on the inventory page (logged in as `standard_user`): visible, href `https://www.linkedin.com/company/sauce-labs/home/`, `target="_blank"`, opens a new tab whose URL is that page or a linkedin.com login/authwall redirect.
+
+> Note: the input said the highest ID was 023, but only IDs up to 017 exist in `specs/` and `tests/`, and `footer-links.spec.ts` does not exist. IDs therefore continue at 018. Please check for a mismatch with another branch.
+
+### TC-SAUCEDEMO-018 LinkedIn footer link has the correct href and target
+
+- **Priority:** Medium · **Type:** Functional
+- **Preconditions:** Logged in as `standard_user` on the inventory page
+- **Steps:** Locate the "LinkedIn" link in the footer.
+- **Expected result:** Visible; href `https://www.linkedin.com/company/sauce-labs/home/`; `target="_blank"`.
+- **Traceability:** Requirement: LinkedIn footer link attributes.
+- **Automated:** Yes (`tests/generated/saucedemo-com/footer-linkedin.spec.ts`)
+- **Result:** `fixme` — **POTENTIAL BUG:** href is `https://www.linkedin.com/company/sauce-labs/` (missing `home/`). `target="_blank"` is correct.
+
+### TC-SAUCEDEMO-019 LinkedIn footer link opens a new tab
+
+- **Priority:** Medium · **Type:** Functional
+- **Preconditions:** Logged in as `standard_user` on the inventory page
+- **Steps:** Click the "LinkedIn" footer link.
+- **Expected result:** A new tab opens with a linkedin.com URL (company page, login or authwall redirect); the original tab stays on the inventory page. LinkedIn page content is not asserted.
+- **Traceability:** Requirement: clicking opens a new tab.
+- **Automated:** Yes (`tests/generated/saucedemo-com/footer-linkedin.spec.ts`)
+- **Result:** Pass.
