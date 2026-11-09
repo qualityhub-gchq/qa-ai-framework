@@ -20,7 +20,7 @@ test.describe('Footer social links', () => {
     { tag: '@generated' },
     async ({ page }) => {
       await loginAsStandardUser(page);
-      await expect(page.getByText('Products', { exact: true })).toBeVisible();
+      await expect(page.getByTestId('title'), 'Products page title').toHaveText('Products');
     },
   );
 
@@ -30,8 +30,11 @@ test.describe('Footer social links', () => {
     async ({ page }) => {
       await loginAsStandardUser(page);
       const facebook = page.getByRole('link', { name: 'Facebook' });
-      await expect(facebook).toBeVisible();
-      await expect(facebook).toHaveAttribute('href', 'https://www.facebook.com/saucelabs');
+      await expect(facebook, 'Facebook footer link').toBeVisible();
+      await expect(facebook, 'Facebook link href').toHaveAttribute(
+        'href',
+        'https://www.facebook.com/saucelabs',
+      );
     },
   );
 
@@ -40,10 +43,10 @@ test.describe('Footer social links', () => {
     { tag: '@generated' },
     async ({ page }) => {
       await loginAsStandardUser(page);
-      await expect(page.getByRole('link', { name: 'Facebook' })).toHaveAttribute(
-        'target',
-        '_blank',
-      );
+      await expect(
+        page.getByRole('link', { name: 'Facebook' }),
+        'Facebook link target',
+      ).toHaveAttribute('target', '_blank');
     },
   );
 
@@ -53,10 +56,12 @@ test.describe('Footer social links', () => {
     async ({ page }) => {
       await loginAsStandardUser(page);
       const links = page.getByRole('contentinfo').getByRole('link');
-      await expect(links).toHaveCount(3);
-      for (const link of await links.all()) {
-        await expect(link).toHaveAttribute('target', '_blank');
-      }
+      await expect(links, 'footer social links').toHaveCount(3);
+      // One retrying assertion instead of a non-retrying links.all() loop.
+      await expect(
+        links.and(page.locator('[target="_blank"]')),
+        'every footer link should have target="_blank"',
+      ).toHaveCount(3);
     },
   );
 });
