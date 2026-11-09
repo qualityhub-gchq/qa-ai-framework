@@ -15,7 +15,12 @@ test.describe('Booking API', () => {
     async ({ request }) => {
       const response = await request.get('/ping');
 
-      expect(response.status()).toBe(201);
+      // Restful-Booker /ping returns 201 Created by design (not 200).
+      expect(response.status(), 'API health check: GET /ping status').toBe(201);
+      expect(response.ok(), 'API health check: response should be 2xx').toBe(true);
+      expect(response.headers()['content-type'], 'API health check: Content-Type').toContain(
+        'text/plain',
+      );
     },
   );
 
