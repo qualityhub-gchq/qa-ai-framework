@@ -25,17 +25,6 @@ test.describe('Saucedemo login', () => {
   );
 
   test(
-    'TC-SAUCEDEMO-002 wrong password shows an error',
-    { tag: '@generated' },
-    async ({ page }) => {
-      await login(page, 'standard_user', 'wrong_password');
-
-      await expect(page.getByTestId('error')).toContainText('do not match');
-      await expect(page).not.toHaveURL(/inventory\.html/);
-    },
-  );
-
-  test(
     'TC-SAUCEDEMO-003 empty username shows a required-field error',
     { tag: '@generated' },
     async ({ page }) => {

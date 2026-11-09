@@ -65,4 +65,15 @@ test.describe('Login', () => {
       await expect(loginPage.errorMessage).toContainText('Password is required');
     },
   );
+
+  test(
+    'TC-LOGIN-006 valid username with wrong password is rejected',
+    { tag: '@regression' },
+    async ({ loginPage, page }) => {
+      await loginPage.login(users.standard.username, 'wrong_password');
+
+      await expect(loginPage.errorMessage).toContainText('do not match');
+      await expect(page).not.toHaveURL(/inventory\.html/);
+    },
+  );
 });

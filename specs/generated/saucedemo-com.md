@@ -30,7 +30,7 @@ Demo credentials (shown publicly on the login page): `standard_user`, `locked_ou
   2. Click Login.
 - **Expected result:** Error "Username and password do not match any user in this service"; user stays on login page.
 - **Traceability:** Requirement: error on invalid credentials.
-- **Automated:** Yes (`tests/generated/saucedemo-com/saucedemo.spec.ts`)
+- **Automated:** Yes — promoted to TC-LOGIN-006 (`tests/ui/login.spec.ts`)
 
 ### TC-SAUCEDEMO-003 Empty username
 

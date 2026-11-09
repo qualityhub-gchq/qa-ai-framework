@@ -48,3 +48,12 @@
 - **Test data:** `standard_user` / empty password
 - **Expected result:** Error "Password is required"
 - **Automated:** Yes (`tests/ui/login.spec.ts`)
+
+### TC-LOGIN-006 Valid username with wrong password is rejected
+
+- **Priority:** High
+- **Type:** Negative
+- **Test data:** `standard_user` / wrong password (differs from TC-LOGIN-003, which uses an unknown username)
+- **Steps:** 1. Enter credentials 2. Click **Login**
+- **Expected result:** Error "Username and password do not match any user in this service"; user stays on the login page
+- **Automated:** Yes (`tests/ui/login.spec.ts`)
