@@ -75,12 +75,27 @@ jobs:
             --allowedTools "Read,Write,Edit,Glob,Grep,mcp__playwright-test,Bash(npx playwright test:*),Bash(npx eslint:*),Bash(npx prettier:*),Bash(node scripts/page-snapshot.mjs:*)"
 
       # From here on, the WORKFLOW (not the AI) verifies the result — the AI doesn't grade itself.
+      # Only files created/changed by THIS run, so the report doesn't repeat tests from earlier runs.
+      - name: Find test files from this run
+        id: changed
+        env:
+          SLUG: ${{ steps.prep.outputs.slug }}
+        run: |
+          files=$(git status --porcelain --untracked-files=all -- "tests/generated/$SLUG" | awk '{print $2}' | grep '\.spec\.ts$' | tr '\n' ' ' || true)
+          if [ -z "$files" ]; then
+            echo "::error::Claude did not create or change any test file in tests/generated/$SLUG"
+            exit 1
+          fi
+          echo "Files from this run: $files"
+          echo "files=$files" >> "$GITHUB_OUTPUT"
+
       - name: Run generated tests
         id: tests
         continue-on-error: true
         env:
-          SLUG: ${{ steps.prep.outputs.slug }}
-        run: npx playwright test --project=explorer "tests/generated/$SLUG" --retries=1
+          FILES: ${{ steps.changed.outputs.files }}
+        # $FILES is deliberately unquoted: it is a space-separated list of paths.
+        run: npx playwright test --project=explorer $FILES --retries=1
 
       - name: Lint generated tests
         id: lint
